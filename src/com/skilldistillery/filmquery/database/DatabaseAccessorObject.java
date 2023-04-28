@@ -29,7 +29,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		Film film = null;
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT * FROM film WHERE id = ?";
+			String sql = "SELECT film.* FROM film WHERE id = ?";
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
 			ResultSet rs = stmt.executeQuery();
@@ -47,6 +47,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				String features = rs.getString("special_features");
 				film = new Film(filmIdentification, title, desc, releaseYear, langId, rentDur, rate, length, repCost,
 						rating, features);
+				film.setActors(findActorsByFilmId(filmId));
 			}
 			stmt.close();
 			conn.close();
@@ -61,16 +62,16 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	public Actor findActorById(int actorId) {
 		Actor actor = null;
 		try {
-			// ... to be filled in by ME!
+	
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			// formulate a query
+		
 			String sql = "SELECT id, first_name, last_name FROM actor WHERE id = ?";
-			// prepare statement for the db
+		
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, actorId);
-			// run the statement
+			
 			ResultSet actorResult = stmt.executeQuery();
-			// iterate results
+			
 			if (actorResult.next()) {
 				int id = actorResult.getInt("id");
 				String fn = actorResult.getString("first_name");
@@ -79,11 +80,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 				actor.setFilms(findFilmsByActorId(actorId));
 
-				// Create the object
-				// Here is our mapping of query columns to our object fields:
-//			actor.setId(actorResult.getInt(1));
-//			actor.setFirstName(actorResult.getString(2));
-//			actor.setLastName(actorResult.getString(3));
 			}
 			stmt.close();
 			conn.close();
@@ -102,8 +98,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 
-			String sql = "SELECT film.* " + " FROM film JOIN film_actor ON film.id = film_actor.film_id "
-					+ " WHERE film_actor.actor.id = ?";
+			String sql = "SELECT film.* FROM film JOIN film_actor ON film.id = film_actor.film_id WHERE actor_id = ?";
 
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, actorId);
@@ -114,14 +109,14 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				int filmId = rs.getInt("id");
 				String title = rs.getString("title");
 				String desc = rs.getString("description");
-				short releaseYear = rs.getShort("releaseYear");
-				int langId = rs.getInt("langId");
-				int rentDur = rs.getInt("rentDur");
-				double rate = rs.getDouble("rate");
+				short releaseYear = rs.getShort("release_year");
+				int langId = rs.getInt("language_id");
+				int rentDur = rs.getInt("rental_duration");
+				double rate = rs.getDouble("rental_rate");
 				int length = rs.getInt("length");
-				double repCost = rs.getDouble("repCost");
+				double repCost = rs.getDouble("replacement_cost");
 				String rating = rs.getString("rating");
-				String features = rs.getString("features");
+				String features = rs.getString("special_features");
 				Film film = new Film(filmId, title, desc, releaseYear, langId, rentDur, rate, length, repCost, rating,
 						features);
 				films.add(film);
@@ -137,12 +132,11 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 	@Override
 	public List<Actor> findActorsByFilmId(int filmId) {
-		List<Actor> actor = new ArrayList<>();
+		List<Actor> actors = new ArrayList<>();
 
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT film.* " + " FROM film JOIN film_actor ON film.id = film_actor.film_id "
-					+ " WHERE film_actor.actor.id = ?";
+			String sql = "SELECT actor.* " + " FROM actor JOIN film_actor ON actor.id = film_actor.actor_id WHERE film_id = ?";
 
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
@@ -153,16 +147,18 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				int id = rs.getInt("id");
 				String fn = rs.getString("first_name");
 				String ln = rs.getString("last_name");
-				actor = new Actor(id, fn, ln);
+				Actor actor = new Actor(id, fn, ln);
+				actors.add(actor);
 				
 			}
-
+			rs.close();
+			stmt.close();
+			conn.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return actor;
+		return actors;
 	}
 
 }

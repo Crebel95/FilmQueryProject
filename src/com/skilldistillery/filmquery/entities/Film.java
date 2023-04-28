@@ -1,5 +1,6 @@
 package com.skilldistillery.filmquery.entities;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -32,6 +33,15 @@ public class Film {
 		this.features = features;
 		
 			}
+	
+	public List<Actor> getActors() {
+		List<Actor> copy = new ArrayList<>(actors);
+		return actors;
+	}
+
+	public void setActors(List<Actor> actors) {
+		this.actors = actors;
+	}
 
 	public int getFilmId() {
 		return filmId;

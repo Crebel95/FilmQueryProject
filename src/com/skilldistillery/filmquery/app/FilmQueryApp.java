@@ -18,14 +18,14 @@ public class FilmQueryApp {
   }
 
   private void test() {
-	  Actor actor = db.findActorById(143);
+	  Actor actor = db.findActorById(5);
 	  if (actor != null) {
 		  	System.out.println(actor);
 	  }
 	  else {
 		  System.out.println("No such actor found!");
 	  }
-	  System.out.println(actor);
+	 
 	  
 //    Film film = db.findFilmById(1);
 //    System.out.println(film);
