@@ -13,8 +13,8 @@ public class FilmQueryApp {
 
   public static void main(String[] args) {
     FilmQueryApp app = new FilmQueryApp();
-    app.test();
-//    app.launch();
+//    app.test();
+    app.launch();
   }
 
   private void test() {
@@ -40,7 +40,22 @@ public class FilmQueryApp {
   }
 
   private void startUserInterface(Scanner input) {
+	  
+	  System.out.println("Welcome to the Main Menu! /n Select one of the options below: ");
+	  System.out.println("1. Look up a film by its ID");
+	  System.out.println("2. Look up a film by a keyword");
+	  System.out.println("3. Exit the application");
+	  int selection = input.nextInt();
+	  
+	  if (selection == 1) {
+		  
+	  }
     
+  }
+  
+  private void ByFilmId() {
+	  System.out.println("Enter the film ID: ");
+	  
   }
 
 }
