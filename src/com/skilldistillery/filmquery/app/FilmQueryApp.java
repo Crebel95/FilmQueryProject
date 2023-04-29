@@ -14,20 +14,7 @@ public class FilmQueryApp {
 
 	public static void main(String[] args) {
 		FilmQueryApp app = new FilmQueryApp();
-//    app.test();
 		app.launch();
-	}
-
-	private void test() {
-		Actor actor = db.findActorById(5);
-		if (actor != null) {
-			System.out.println(actor);
-		} else {
-			System.out.println("No such actor found!");
-		}
-
-//    Film film = db.findFilmById(1);
-//    System.out.println(film);
 	}
 
 	private void launch() {
@@ -39,40 +26,46 @@ public class FilmQueryApp {
 	}
 
 	private void startUserInterface(Scanner input) {
+		int selection;
 
-		System.out.println("Welcome to the Main Menu! /n Select one of the options below: ");
-		System.out.println("1. Look up a film by its ID");
-		System.out.println("2. Look up a film by a keyword");
-		System.out.println("3. Exit the application");
-		int selection = input.nextInt();
+		do {
+			dividingLine();
+			System.out.println("Welcome to the Main Menu! \nSelect one of the options below: \n ");
+			System.out.println("1. Look up a film by its ID");
+			System.out.println("2. Look up a film by a keyword");
+			System.out.println("3. Exit the application");
+			dividingLine();
+			selection = input.nextInt();
 
-		if (selection == 1) {
-			byFilmId();
-		}
-		if (selection == 2) {
-			byKeyword();
-		}
-		if (selection == 3) {
-			System.exit(selection);
-		}
-		else {
-			System.err.print("Invalid selection. Please enter a valid number to continue.");
-		}
+			if (selection == 1) {
+				byFilmId();
+			}
+			if (selection == 2) {
+				byKeyword();
+			}
+			if (selection == 3) {
+				System.exit(selection);
+			}
 
+			else if (selection <= 0 || selection >= 4) {
+				System.err.print("Invalid selection. Please enter a valid number to continue.");
+			}
+		} while (selection != 3);
 	}
 
 	private void byFilmId() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter the film's ID: ");
-		int selection = sc.nextInt();
-		Film film = db.findFilmById(selection);
+		int IDselection = sc.nextInt();
+		Film film = db.findFilmById(IDselection);
 
 		if (film != null) {
-			System.out.println(film.getTitle());
-			System.out.println(film.getDesc());
-			System.out.println(film.getReleaseYear());
-			System.out.println(film.getRating());
-		    System.out.println(film.getLangId());
+			System.out.println("Title:        " + film.getTitle());
+			System.out.println("Description:  " + film.getDesc());
+			System.out.println("Release Year: " + film.getReleaseYear());
+			System.out.println("Rating:       " + film.getRating());
+			transformLanguageId(film.getLangId());
+			System.out.print("Actor name:   ");
 			List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
 
 			if (actors != null) {
@@ -89,17 +82,20 @@ public class FilmQueryApp {
 	private void byKeyword() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter a keyword: ");
-		String selection = sc.nextLine();
-		List<Film> films = db.findFilmByKeyword(selection);
+		String KeySelection = sc.nextLine();
+		List<Film> films = db.findFilmByKeyword(KeySelection);
 
 		if (films != null) {
 			for (Film film : films) {
-				System.out.println(film.getTitle());
-				System.out.println(film.getDesc());
-				System.out.println(film.getReleaseYear());
-				System.out.println(film.getRating());
+				
+				System.out.println("Title:        " + film.getTitle());
+				System.out.println("Description:  " + film.getDesc());
+				System.out.println("Release Year: " + film.getReleaseYear());
+				System.out.println("Rating:       " + film.getRating());
 				transformLanguageId(film.getLangId());
+				System.out.print("Actor name:   ");
 				List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
+				
 
 				if (actors != null) {
 					for (Actor actor : actors) {
@@ -109,29 +105,35 @@ public class FilmQueryApp {
 				} else {
 					System.out.println("There is no film associated with this ID");
 				}
+				dividingLine();
 			}
 		}
 	}
+
+	public void transformLanguageId(int langId) {
+		
+		if (langId == 1) {
+			System.out.println("Language:     English");
+		}
+		if (langId == 2) {
+			System.out.println("Language:     Italian");
+		}
+		if (langId == 3) {
+			System.out.println("Language:     Japanese");
+		}
+		if (langId == 4) {
+			System.out.println("Language:     Mandarin");
+		}
+		if (langId == 5) {
+			System.out.println("Language:     French");
+		}
+		if (langId == 6) {
+			System.out.println("Language:     German");
+		}
+	}
 	
-	public void transformLanguageId(int langId){
-		if(langId == 1) {
-			System.out.println("English");
-		}
-		if(langId == 2) {
-			System.out.println("Italian");
-		}
-		if(langId == 3) {
-			System.out.println("Japanese");
-		}
-		if(langId == 4) {
-			System.out.println("Mandarin");
-		}
-		if(langId == 5) {
-			System.out.println("French");
-		}
-		if(langId == 6) {
-			System.out.println("German");
-		}
+	public void dividingLine() {
+		System.out.println("--------------------------------------------");
 	}
 
 }

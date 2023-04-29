@@ -62,16 +62,16 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	public Actor findActorById(int actorId) {
 		Actor actor = null;
 		try {
-	
+
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-		
+
 			String sql = "SELECT id, first_name, last_name FROM actor WHERE id = ?";
-		
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, actorId);
-			
+
 			ResultSet actorResult = stmt.executeQuery();
-			
+
 			if (actorResult.next()) {
 				int id = actorResult.getInt("id");
 				String fn = actorResult.getString("first_name");
@@ -136,7 +136,8 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
-			String sql = "SELECT actor.* " + " FROM actor JOIN film_actor ON actor.id = film_actor.actor_id WHERE film_id = ?";
+			String sql = "SELECT actor.* "
+					+ " FROM actor JOIN film_actor ON actor.id = film_actor.actor_id WHERE film_id = ?";
 
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, filmId);
@@ -149,7 +150,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				String ln = rs.getString("last_name");
 				Actor actor = new Actor(id, fn, ln);
 				actors.add(actor);
-				
+
 			}
 			rs.close();
 			stmt.close();
@@ -160,57 +161,38 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 		return actors;
 	}
-	public List<Film> findFilmByKeyword(String keyword){
+
+	public List<Film> findFilmByKeyword(String keyword) {
 		List<Film> films = new ArrayList<>();
-		
+
 		try {
 			Connection conn = DriverManager.getConnection(URL, user, pass);
 			String sql = "SELECT * FROM film WHERE title LIKE ? OR description LIKE ?";
-			
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, "%" + keyword + "%");
 			stmt.setString(2, "%" + keyword + "%");
-			
+
 			ResultSet rs = stmt.executeQuery();
-			
-			while(rs.next()) {
+
+			while (rs.next()) {
 				int filmId = rs.getInt("id");
 				String title = rs.getString("title");
 				String desc = rs.getString("description");
 				short releaseYear = rs.getShort("release_year");
 				int langId = rs.getInt("language_id");
 				String rating = rs.getString("rating");
-				
+
 				Film film = new Film(filmId, title, desc, releaseYear, langId, rating);
 				films.add(film);
 			}
 			rs.close();
 			stmt.close();
 			conn.close();
-		} catch (SQLException e){
+		} catch (SQLException e) {
 			e.printStackTrace();
-		} return films;
-	}
-	
-	public void tranformLanguageId(int langId){
-		if(langId == 1) {
-			System.out.println("English");
 		}
-		if(langId == 2) {
-			System.out.println("Italian");
-		}
-		if(langId == 3) {
-			System.out.println("Japanese");
-		}
-		if(langId == 4) {
-			System.out.println("Mandarin");
-		}
-		if(langId == 5) {
-			System.out.println("French");
-		}
-		if(langId == 6) {
-			System.out.println("German");
-		}
+		return films;
 	}
 
 }

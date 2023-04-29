@@ -31,9 +31,9 @@ public class Film {
 		this.repCost = repCost;
 		this.rating = rating;
 		this.features = features;
-		
-			}
-	
+
+	}
+
 	public Film(int filmId2, String title2, String desc2, short releaseYear, int langId2, String rating2) {
 		this.filmId = filmId2;
 		this.title = title2;
@@ -168,6 +168,5 @@ public class Film {
 				+ ", langId=" + langId + ", rentDur=" + rentDur + ", rate=" + rate + ", length=" + length + ", repCost="
 				+ repCost + ", rating=" + rating + ", features=" + features + "]";
 	}
-	
-	
+
 }
