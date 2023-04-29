@@ -9,75 +9,102 @@ import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
 
 public class FilmQueryApp {
-  
-  DatabaseAccessor db = new DatabaseAccessorObject();
 
-  public static void main(String[] args) {
-    FilmQueryApp app = new FilmQueryApp();
+	DatabaseAccessor db = new DatabaseAccessorObject();
+
+	public static void main(String[] args) {
+		FilmQueryApp app = new FilmQueryApp();
 //    app.test();
-    app.launch();
-  }
+		app.launch();
+	}
 
-  private void test() {
-	  Actor actor = db.findActorById(5);
-	  if (actor != null) {
-		  	System.out.println(actor);
-	  }
-	  else {
-		  System.out.println("No such actor found!");
-	  }
-	 
-	  
+	private void test() {
+		Actor actor = db.findActorById(5);
+		if (actor != null) {
+			System.out.println(actor);
+		} else {
+			System.out.println("No such actor found!");
+		}
+
 //    Film film = db.findFilmById(1);
 //    System.out.println(film);
-  }
+	}
 
-  private void launch() {
-    Scanner input = new Scanner(System.in);
-    
-    startUserInterface(input);
-    
-    input.close();
-  }
+	private void launch() {
+		Scanner input = new Scanner(System.in);
 
-  private void startUserInterface(Scanner input) {
-	  
-	  System.out.println("Welcome to the Main Menu! /n Select one of the options below: ");
-	  System.out.println("1. Look up a film by its ID");
-	  System.out.println("2. Look up a film by a keyword");
-	  System.out.println("3. Exit the application");
-	  int selection = input.nextInt();
-	  
-	  if (selection == 1) {
-		  byFilmId();
-	  }
-    
-  }
-  private void byFilmId() {
-	  Scanner sc = new Scanner(System.in);
-	  System.out.println("Enter the film's ID: ");
-	  int selection = sc.nextInt();
-	  Film film = db.findFilmById(selection);
-	  
-	  if (film != null) {
-		  System.out.println(film.getTitle());
-		  System.out.println(film.getDesc());
-		  System.out.println(film.getLangId());
-		  System.out.println(film.getReleaseYear());
-		  System.out.println(film.getRating());
-		  List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
-		  
-		  if(actors != null) {
-			  for(Actor actor : actors) {
-				  System.out.println(actor.getFirstName() + " " + actor.getLastName());
-			  } 
-				  
-			  } else {
-				  System.out.println("There is no film associated with this ID");
-		  }
-	  }
-  }
-  
-  
+		startUserInterface(input);
+
+		input.close();
+	}
+
+	private void startUserInterface(Scanner input) {
+
+		System.out.println("Welcome to the Main Menu! /n Select one of the options below: ");
+		System.out.println("1. Look up a film by its ID");
+		System.out.println("2. Look up a film by a keyword");
+		System.out.println("3. Exit the application");
+		int selection = input.nextInt();
+
+		if (selection == 1) {
+			byFilmId();
+		}
+		if(selection ==2) {
+			byKeyword();
+		}
+
+	}
+
+	private void byFilmId() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the film's ID: ");
+		int selection = sc.nextInt();
+		Film film = db.findFilmById(selection);
+
+		if (film != null) {
+			System.out.println(film.getTitle());
+			System.out.println(film.getDesc());
+			System.out.println(film.getReleaseYear());
+			System.out.println(film.getRating());
+			System.out.println(film.getLangId());
+			List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
+
+			if (actors != null) {
+				for (Actor actor : actors) {
+					System.out.println(actor.getFirstName() + " " + actor.getLastName());
+				}
+
+			} else {
+				System.out.println("There is no film associated with this ID");
+			}
+		}
+	}
+
+	private void byKeyword() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter a keyword: ");
+		String selection = sc.nextLine();
+		List<Film> films = db.findFilmByKeyword(selection);
+
+		if (films != null) {
+			for (Film film : films) {
+				System.out.println(film.getTitle());
+				System.out.println(film.getDesc());
+				System.out.println(film.getReleaseYear());
+				System.out.println(film.getRating());
+				System.out.println(film.getLangId());
+				List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
+
+				if (actors != null) {
+					for (Actor actor : actors) {
+						System.out.println(actor.getFirstName() + " " + actor.getLastName());
+					}
+
+				} else {
+					System.out.println("There is no film associated with this ID");
+				}
+			}
+		}
+	}
 
 }

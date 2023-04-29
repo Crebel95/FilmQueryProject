@@ -160,5 +160,36 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 
 		return actors;
 	}
+	public List<Film> findFilmByKeyword(String keyword){
+		List<Film> films = new ArrayList<>();
+		
+		try {
+			Connection conn = DriverManager.getConnection(URL, user, pass);
+			String sql = "SELECT * FROM film WHERE title LIKE ? OR description LIKE ?";
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, "%" + keyword + "%");
+			stmt.setString(2, "%" + keyword + "%");
+			
+			ResultSet rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				int filmId = rs.getInt("id");
+				String title = rs.getString("title");
+				String desc = rs.getString("description");
+				short releaseYear = rs.getShort("release_year");
+				int langId = rs.getInt("language_id");
+				String rating = rs.getString("rating");
+				
+				Film film = new Film(filmId, title, desc, releaseYear, langId, rating);
+				films.add(film);
+			}
+			rs.close();
+			stmt.close();
+			conn.close();
+		} catch (SQLException e){
+			e.printStackTrace();
+		} return films;
+	}
 
 }
