@@ -191,5 +191,26 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			e.printStackTrace();
 		} return films;
 	}
+	
+	public void tranformLanguageId(int langId){
+		if(langId == 1) {
+			System.out.println("English");
+		}
+		if(langId == 2) {
+			System.out.println("Italian");
+		}
+		if(langId == 3) {
+			System.out.println("Japanese");
+		}
+		if(langId == 4) {
+			System.out.println("Mandarin");
+		}
+		if(langId == 5) {
+			System.out.println("French");
+		}
+		if(langId == 6) {
+			System.out.println("German");
+		}
+	}
 
 }

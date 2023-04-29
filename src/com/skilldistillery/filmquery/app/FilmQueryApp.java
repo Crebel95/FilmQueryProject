@@ -49,8 +49,14 @@ public class FilmQueryApp {
 		if (selection == 1) {
 			byFilmId();
 		}
-		if(selection ==2) {
+		if (selection == 2) {
 			byKeyword();
+		}
+		if (selection == 3) {
+			System.exit(selection);
+		}
+		else {
+			System.err.print("Invalid selection. Please enter a valid number to continue.");
 		}
 
 	}
@@ -66,7 +72,7 @@ public class FilmQueryApp {
 			System.out.println(film.getDesc());
 			System.out.println(film.getReleaseYear());
 			System.out.println(film.getRating());
-			System.out.println(film.getLangId());
+		    System.out.println(film.getLangId());
 			List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
 
 			if (actors != null) {
@@ -92,7 +98,7 @@ public class FilmQueryApp {
 				System.out.println(film.getDesc());
 				System.out.println(film.getReleaseYear());
 				System.out.println(film.getRating());
-				System.out.println(film.getLangId());
+				transformLanguageId(film.getLangId());
 				List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
 
 				if (actors != null) {
@@ -104,6 +110,27 @@ public class FilmQueryApp {
 					System.out.println("There is no film associated with this ID");
 				}
 			}
+		}
+	}
+	
+	public void transformLanguageId(int langId){
+		if(langId == 1) {
+			System.out.println("English");
+		}
+		if(langId == 2) {
+			System.out.println("Italian");
+		}
+		if(langId == 3) {
+			System.out.println("Japanese");
+		}
+		if(langId == 4) {
+			System.out.println("Mandarin");
+		}
+		if(langId == 5) {
+			System.out.println("French");
+		}
+		if(langId == 6) {
+			System.out.println("German");
 		}
 	}
 
