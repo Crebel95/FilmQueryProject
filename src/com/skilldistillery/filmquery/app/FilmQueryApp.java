@@ -1,5 +1,6 @@
 package com.skilldistillery.filmquery.app;
 
+import java.util.List;
 import java.util.Scanner;
 
 import com.skilldistillery.filmquery.database.DatabaseAccessor;
@@ -48,14 +49,35 @@ public class FilmQueryApp {
 	  int selection = input.nextInt();
 	  
 	  if (selection == 1) {
-		  
+		  byFilmId();
 	  }
     
   }
-  
-  private void ByFilmId() {
-	  System.out.println("Enter the film ID: ");
+  private void byFilmId() {
+	  Scanner sc = new Scanner(System.in);
+	  System.out.println("Enter the film's ID: ");
+	  int selection = sc.nextInt();
+	  Film film = db.findFilmById(selection);
 	  
+	  if (film != null) {
+		  System.out.println(film.getTitle());
+		  System.out.println(film.getDesc());
+		  System.out.println(film.getLangId());
+		  System.out.println(film.getReleaseYear());
+		  System.out.println(film.getRating());
+		  List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
+		  
+		  if(actors != null) {
+			  for(Actor actor : actors) {
+				  System.out.println(actor.getFirstName() + " " + actor.getLastName());
+			  } 
+				  
+			  } else {
+				  System.out.println("There is no film associated with this ID");
+		  }
+	  }
   }
+  
+  
 
 }
