@@ -1,5 +1,6 @@
 package com.skilldistillery.filmquery.app;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -35,10 +36,17 @@ public class FilmQueryApp {
 			System.out.println("2. Look up a film by a keyword");
 			System.out.println("3. Exit the application");
 			dividingLine();
+		
 			selection = input.nextInt();
 
 			if (selection == 1) {
-				byFilmId();
+				try {
+					byFilmId();
+				} catch (InputMismatchException e) {
+					System.err.println(
+							"Invalid entry. Please enter a valid number. Only numerical values that are whole numbers will work. example: 1, 43, 502. ");
+				}
+
 			}
 			if (selection == 2) {
 				byKeyword();
@@ -48,7 +56,7 @@ public class FilmQueryApp {
 			}
 
 			else if (selection <= 0 || selection >= 4) {
-				System.err.print("Invalid selection. Please enter a valid number to continue.");
+				System.err.println("Invalid selection. Please enter a valid number to continue.");
 			}
 		} while (selection != 3);
 	}
@@ -59,11 +67,12 @@ public class FilmQueryApp {
 		int IDselection = sc.nextInt();
 		Film film = db.findFilmById(IDselection);
 
+		if (film == null) {
+			System.out.println("There is no film associated with this ID");
+		}
+
 		if (film != null) {
-			System.out.println("Title:        " + film.getTitle());
-			System.out.println("Description:  " + film.getDesc());
-			System.out.println("Release Year: " + film.getReleaseYear());
-			System.out.println("Rating:       " + film.getRating());
+			System.out.println(film.toString());
 			transformLanguageId(film.getLangId());
 			System.out.print("Actor name:   ");
 			List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
@@ -73,29 +82,24 @@ public class FilmQueryApp {
 					System.out.println(actor.getFirstName() + " " + actor.getLastName());
 				}
 
-			} else {
-				System.out.println("There is no film associated with this ID");
 			}
+
 		}
 	}
 
 	private void byKeyword() {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter a keyword: ");
-		String KeySelection = sc.nextLine();
-		List<Film> films = db.findFilmByKeyword(KeySelection);
+		String keySelection = sc.nextLine();
+		List<Film> films = db.findFilmByKeyword(keySelection);
+		List<Actor> actors = null;
 
 		if (films != null) {
 			for (Film film : films) {
-				
-				System.out.println("Title:        " + film.getTitle());
-				System.out.println("Description:  " + film.getDesc());
-				System.out.println("Release Year: " + film.getReleaseYear());
-				System.out.println("Rating:       " + film.getRating());
+				System.out.println(film.toString());
 				transformLanguageId(film.getLangId());
 				System.out.print("Actor name:   ");
-				List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
-				
+				actors = db.findActorsByFilmId(film.getFilmId());
 
 				if (actors != null) {
 					for (Actor actor : actors) {
@@ -103,15 +107,19 @@ public class FilmQueryApp {
 					}
 
 				} else {
-					System.out.println("There is no film associated with this ID");
+					System.out.println("There are no actors named in this film.");
 				}
 				dividingLine();
 			}
 		}
+		if (actors == null) {
+			System.out.println("Keyword does not have any matches");
+		}
+
 	}
 
 	public void transformLanguageId(int langId) {
-		
+
 		if (langId == 1) {
 			System.out.println("Language:     English");
 		}
@@ -131,7 +139,7 @@ public class FilmQueryApp {
 			System.out.println("Language:     German");
 		}
 	}
-	
+
 	public void dividingLine() {
 		System.out.println("--------------------------------------------");
 	}

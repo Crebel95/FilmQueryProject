@@ -164,9 +164,8 @@ public class Film {
 
 	@Override
 	public String toString() {
-		return "Film [filmId=" + filmId + ", title=" + title + ", desc=" + desc + ", releaseYear=" + releaseYear
-				+ ", langId=" + langId + ", rentDur=" + rentDur + ", rate=" + rate + ", length=" + length + ", repCost="
-				+ repCost + ", rating=" + rating + ", features=" + features + "]";
+		return "Film ID:      " + filmId + "\nTitle:        " + title + "\nRelease year: " + releaseYear + 
+				"\nRating:       " + rating + "\nDescription:  " + desc;
 	}
 
 }
